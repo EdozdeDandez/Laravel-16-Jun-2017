@@ -5,7 +5,8 @@ Route::get('/', function () {
 });
 
 Route::get('/home', 'HomeController@index')->name('home');
-Route::get('/tasks', 'TasksController@index')->name('tasks');
-Route::post('/tasks','TasksController@store');
+Route::get('/tasks-page', 'MyTasksController@index')->name('task');
+Route::get('/tasks-page/my', 'MyTasksController@show')->name('mine');
+Route::resource('/tasks', 'TasksController');
 
 Auth::routes();

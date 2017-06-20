@@ -2,8 +2,8 @@
 
 @section('navigation')
     <li><a href="{{ route('home') }}">Home</a></li>
-    <li><a href="{{ route('tasks') }}">Tasks</a></li>
-    <li><a href="#">My tasks</a></li>
+    <li><a href="{{ URL::to('/tasks') }}">Tasks</a></li>
+    <li><a href="{{ route('task') }}">My tasks</a></li>
 @endsection
 @section('content')
 <div class="container">

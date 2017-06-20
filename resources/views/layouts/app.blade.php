@@ -36,7 +36,11 @@
                 <div class="collapse navbar-collapse" id="app-navbar-collapse">
                     <!-- Left Side Of Navbar -->
                     <ul class="nav navbar-nav">
-                        &nbsp;@yield('navigation')
+                        &nbsp;@if (Auth::guest())
+                        @else
+                            <li><a href="{{ URL::to('/tasks') }}">Tasks</a></li>
+                            <li><a href="{{ route('task') }}">My tasks</a></li>
+                        @endif
                     </ul>
 
                     <!-- Right Side Of Navbar -->
@@ -76,5 +80,6 @@
 
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}"></script>
+    <script src="{{ asset('js/mine.js') }}"></script>
 </body>
 </html>
