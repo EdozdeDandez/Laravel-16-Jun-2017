@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Tasks;
 use App\User;
+use Auth;
 
 
 class MyTasksController extends Controller
@@ -20,7 +21,15 @@ class MyTasksController extends Controller
     public function show()
     {
         $id = Auth::user()->id;
-        $data = Tasks::where('User_id',$id);
-        return view('myTasks')->with('data',$data);
+        $data = Tasks::where('user_id',intval($id))->get();
+//        if ($data)
+//        {
+            return view('myTasks',['data'=>$data]);
+//        }
+//        else
+//        {
+//            Session::flash('message', 'No tasks!');
+//            return view('myTasks');
+//        }
     }
 }
