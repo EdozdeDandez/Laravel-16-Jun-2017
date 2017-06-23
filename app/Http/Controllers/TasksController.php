@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\Assign;
 use Illuminate\Http\Request;
+use Auth;
 use Input;
+use Event;
 use Session;
 use Redirect;
 use App\Tasks;
@@ -18,7 +21,7 @@ class TasksController extends Controller
     public function index()
     {
         $data = Tasks::all();
-        return view('tasks',['data'=>$data]);
+        return view('tasks.index',['data'=>$data]);
     }
     public function create()
     {
@@ -36,7 +39,7 @@ class TasksController extends Controller
         if($response)
         {
             Session::flash('message', 'Successfully added Task!');
-            return Redirect::to('/tasks');
+            return redirect('/tasks');
         }
     }
     public function edit($id)
@@ -52,16 +55,28 @@ class TasksController extends Controller
         $task->description = Input::get('description');
         $task->user_id = Input::get('user');
         $response = $task->save();
+        if ($task->user_id!=Auth::user()->id)
+        {
+            $user = User::findOrFail(Input::get('user'));
+            $data = [
+                'name'=>$user->name,
+                'email'=>$user->email,
+                'task'=>$task->name,
+                'user'=>Auth::user()->name,
+                'description'=>$task->description
+            ];
+            event(new Assign($data));
+        }
         if ($response)
         {
             //redirect to tasks
             Session::flash('message', 'Successfully updated task!');
-            return Redirect::to('/tasks');
+            return redirect('/tasks');
         }
     }
     public function show($id)
     {
-        $task = Tasks::find($id);
+        $task = Tasks::findOrFail($id);
         return view('tasks.show',['task'=>$task]);
     }
     public function destroy($id)
@@ -72,7 +87,7 @@ class TasksController extends Controller
         {
             // redirect
             Session::flash('message', 'Successfully deleted the task!');
-            return Redirect::to('/tasks');
+            return redirect('/tasks');
         }
     }
 }

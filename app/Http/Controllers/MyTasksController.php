@@ -22,14 +22,6 @@ class MyTasksController extends Controller
     {
         $id = Auth::user()->id;
         $data = Tasks::where('user_id',intval($id))->get();
-//        if ($data)
-//        {
-            return view('myTasks',['data'=>$data]);
-//        }
-//        else
-//        {
-//            Session::flash('message', 'No tasks!');
-//            return view('myTasks');
-//        }
+        return view('myTasks',['data'=>$data]);
     }
 }
